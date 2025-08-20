@@ -1,0 +1,107 @@
+:root {
+  --bg: #101216;
+  --panel: #161a20;
+  --text: #e6e8eb;
+  --muted: #9aa3af;
+  --accent: #6ca0ff;
+  --border: #272d36;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+.controls {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: 12px;
+}
+
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+label, legend { font-weight: 600; }
+input[type="number"], input[type="file"] {
+  display: block;
+  margin-top: 6px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #0f1216;
+  color: var(--text);
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+fieldset label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 14px;
+  font-weight: 500;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+button {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: #0f1216;
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.preview {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: 12px;
+  min-height: 60vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+.canvas-wrap {
+  display: grid;
+  place-items: center;
+  background: #0b0e12;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  min-height: 50vh;
+  overflow: auto;
+}
+canvas { image-rendering: auto; max-width: 100%; height: auto; }
+.meta { margin-top: 10px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
