@@ -33,7 +33,7 @@ body {
 .field { margin-bottom: 12px; }
 .field:last-child { margin-bottom: 0; }
 label, legend { font-weight: 600; }
-input[type="number"], input[type="file"] {
+input[type="number"], input[type="file"], input[type="color"] {
   display: block;
   margin-top: 6px;
   width: 100%;
@@ -103,5 +103,5 @@ button:hover:not(:disabled) {
   min-height: 50vh;
   overflow: auto;
 }
-canvas { image-rendering: auto; max-width: 100%; height: auto; }
+canvas { image-rendering: pixelated; max-width: 100%; height: auto; }
 .meta { margin-top: 10px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
