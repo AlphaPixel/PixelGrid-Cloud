@@ -1,4 +1,4 @@
-:root {
+`:root {
   --bg: #101216;
   --panel: #161a20;
   --text: #e6e8eb;
@@ -191,4 +191,47 @@ canvas { image-rendering: pixelated; max-width: 100%; height: auto; }
   .modal-card {
     inset: 8% 3% auto 3%;
   }
+}
+
+/* Footer credits */
+.site-footer {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+}
+
+.credit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.credit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.credit-icon {
+  height: 1.5em;
+  width: auto;
+  image-rendering: auto;
+  flex: 0 0 auto;
+}
+
+.site-footer a {
+  color: var(--text);
+  text-decoration: underline;
+}
+.site-footer a:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 1024px) {
+  .site-footer { padding: 12px; }
 }
