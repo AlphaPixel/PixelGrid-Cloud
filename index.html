@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Palette Quantizer (Manual Resampler + Grid)</title>
+  <title>PixelGrid.Cloud: Image Processor for WPlace.live and similar</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -47,8 +47,8 @@
         <label title="Bilinear: fast, smooth. Good default.">
           <input type="radio" name="resample" value="bilinear" checked /> Bilinear
         </label>
-        <label title="Bicubic (Mitchell–Netravali): slower, usually slightly sharper/smoother transitions.">
-          <input type="radio" name="resample" value="bicubic" /> Bicubic (Mitchell–Netravali)
+        <label title="Bicubic (Mitchell-Netravali): slower, usually slightly sharper/smoother transitions.">
+          <input type="radio" name="resample" value="bicubic" /> Bicubic (Mitchell-Netravali)
         </label>
       </fieldset>
 
@@ -65,13 +65,13 @@
       <fieldset class="field" title="Choose dithering strategy before mapping to the palette.">
         <legend>Dither</legend>
         <label title="None: direct nearest-color mapping; clean but can band.">
-          <input type="radio" name="dither" value="none" checked /> None
+          <input type="radio" name="dither" value="none"/> None
         </label>
         <label title="Ordered (Bayer): patterned dithering; stable, grid-like texture.">
           <input type="radio" name="dither" value="ordered" /> Ordered (Bayer)
         </label>
-        <label title="Error Diffusion (Floyd–Steinberg): noise-like dithering; often best for photos.">
-          <input type="radio" name="dither" value="diffusion" /> Error Diffusion (Floyd–Steinberg)
+        <label title="Error Diffusion (Floyd-Steinberg): noise-like dithering; often best for photos.">
+          <input type="radio" name="dither" value="diffusion" checked /> Error Diffusion (Floyd-Steinberg)
         </label>
       </fieldset>
 
@@ -79,7 +79,7 @@
         <legend>Scale & Grid</legend>
 
         <div class="field">
-          <label title="Enable to enlarge by N× using nearest neighbor and overlay a 1px grid every N pixels. Leave off for Blue Marble.">
+          <label title="Enable to enlarge by Nx using nearest neighbor and overlay a 1px grid every N pixels. Leave off for Blue Marble.">
             <input id="enlargeToggle" type="checkbox" />
             Enlarge and overlay grid
           </label>
@@ -89,7 +89,7 @@
           <div class="field">
             <label for="scaleFactor">Scale/Grid step</label>
             <input id="scaleFactor" type="number" min="1" value="5"
-                   title="Integer factor N. Upscales the image by N× and spaces grid lines every N pixels." disabled />
+                   title="Integer factor N. Upscales the image by Nx, and spaces grid lines every N pixels." disabled />
           </div>
           <div class="field">
             <label for="gridColor">Grid color</label>

@@ -7,6 +7,17 @@ This is not a script to draw the image on wplace for you. We don't do botting. I
 
 It's entirely Javascript and runs only in your browser. There's no server processing. It's hosted on Cloudflare Pages.
 
+# URLs
+
+## Live site
+[ https://pixelgrid.cloud/ ] ( https://pixelgrid.cloud/ )
+
+## Staging site (staging branch, preparing for deployment to live)
+[ https://staging.pixelgrid.cloud/ ] ( https://staging.pixelgrid.cloud/ )
+
+## Dev Site (dev branch -- beware of dragons)
+[ https://dev.pixelgrid.cloud/ ] ( https://dev.pixelgrid.cloud/ )
+
 
 
 # Instructions
