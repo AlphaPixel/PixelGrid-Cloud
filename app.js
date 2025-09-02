@@ -309,6 +309,14 @@ fileInput.addEventListener("change", async (e) => {
   } finally {
     URL.revokeObjectURL(blobURL);
   }
+
+  // Show original image immediately (unmodified)
+  canvas.width  = sourceImageBitmap.width;
+  canvas.height = sourceImageBitmap.height;
+  ctx.imageSmoothingEnabled = true;   // default; explicit
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(sourceImageBitmap, 0, 0);
+
   processBtn.disabled=false;
   downloadBtn.disabled=true;
   fileInput.classList.remove("pulse");
