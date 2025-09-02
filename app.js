@@ -37,6 +37,7 @@ const helpModal = document.getElementById("helpModal");
 const helpClose = document.getElementById("helpClose");
 const helpBackdrop = document.getElementById("helpBackdrop");
 const canvasWrap = document.querySelector(".canvas-wrap");
+const footerVersion = document.getElementById("footerVersionString");
 
 
 let sourceImageBitmap = null;
@@ -337,6 +338,9 @@ function refreshScaleInputs() {
 }
 enlargeToggle.addEventListener("change", refreshScaleInputs);
 refreshScaleInputs();
+
+// Display Version
+footerVersion.textContent = PixelGridReleaseString;
 
 // Cue the first action (browse) on load
 fileInput.classList.add("pulse");
