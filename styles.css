@@ -124,7 +124,56 @@ button:hover:not(:disabled) {
   border-radius: 10px;
   min-height: 50vh;
   overflow: auto;
+  background-image: url("PixelGridLogo33pct.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  position: relative;
 }
+
+.canvas-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  pointer-events: none;           /* clicks pass through to canvas */
+  color: var(--text);
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+
+.canvas-overlay h1 {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(24px, 5vw, 48px);
+}
+
+.canvas-overlay h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(16px, 3.5vw, 24px);
+  color: var(--muted);
+}
+
+.canvas-overlay p {
+  margin: 6px 0 0 0;
+  font-weight: 600;
+  font-size: clamp(14px, 3vw, 18px);
+  color: var(--muted);
+}
+
+.canvas-wrap.no-placeholder .canvas-overlay { display: none; }
+
+.canvas-wrap.no-placeholder {
+  background-image: none;
+}
+
 canvas { image-rendering: pixelated; max-width: 100%; height: auto; }
 .meta { margin-top: 10px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 

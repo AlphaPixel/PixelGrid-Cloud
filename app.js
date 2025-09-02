@@ -36,6 +36,8 @@ const helpBtn   = document.getElementById("helpBtn");
 const helpModal = document.getElementById("helpModal");
 const helpClose = document.getElementById("helpClose");
 const helpBackdrop = document.getElementById("helpBackdrop");
+const canvasWrap = document.querySelector(".canvas-wrap");
+
 
 let sourceImageBitmap = null;
 let lastOutputBlobUrl = null;
@@ -288,6 +290,8 @@ fileInput.addEventListener("change", async (e) => {
     metaEl.textContent="";
     return;
   }
+  canvasWrap.classList.add("no-placeholder");
+
   const blobURL = URL.createObjectURL(file);
   try {
     sourceImageBitmap = await createImageBitmap(await fetch(blobURL).then(r=>r.blob()));
@@ -369,7 +373,7 @@ document.getElementById("processBtn").addEventListener("click", () => {
     case "ordered":   quantizeOrdered(resized, quantized, palette); break;
     case "diffusion": quantizeErrorDiffusion(resized, quantized, palette); break;
   }
-
+  
   // Draw result, optionally enlarge + grid
   if (!doEnlarge) {
     canvas.width = dstW; canvas.height = dstH;
