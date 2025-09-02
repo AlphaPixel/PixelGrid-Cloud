@@ -41,6 +41,7 @@ const canvasWrap = document.querySelector(".canvas-wrap");
 
 let sourceImageBitmap = null;
 let lastOutputBlobUrl = null;
+let uploadedFileName = null;
 
 // ====== Utils ======
 function hexToRgb(hex) {
@@ -293,8 +294,13 @@ fileInput.addEventListener("change", async (e) => {
 	fileInput.classList.add("pulse");
 	processBtn.classList.remove("pulse");
 	downloadBtn.classList.remove("pulse");
+	
+	uploadedFileName = null;
     return;
   }
+  
+  uploadedFileName = file.name;
+  
   canvasWrap.classList.add("no-placeholder");
 
   const blobURL = URL.createObjectURL(file);
@@ -457,7 +463,14 @@ downloadBtn.addEventListener("click", () => {
     if (!blob) return;
     lastOutputBlobUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.download = "quantized.png";
+    let baseName = uploadedFileName || "output.png";
+    let dot = baseName.lastIndexOf(".");
+    if (dot > 0) {
+      a.download = baseName.slice(0, dot) + "-PixelGrid" + baseName.slice(dot);
+    } else {
+      a.download = baseName + "-PixelGrid.png";
+    }
+
     a.href = lastOutputBlobUrl;
     document.body.appendChild(a);
     a.click();
