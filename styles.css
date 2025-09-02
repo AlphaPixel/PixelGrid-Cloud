@@ -1,6 +1,6 @@
 :root {
-  --bg: #101216;
-  --panel: #161a20;
+  --bg: #202010;
+  --panel: #303030;
   --text: #e6e8eb;
   --muted: #9aa3af;
   --accent: #6ca0ff;
@@ -124,9 +124,78 @@ button:hover:not(:disabled) {
   border-radius: 10px;
   min-height: 50vh;
   overflow: auto;
+  background-image: url("PixelGridLogo33pct.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  position: relative;
 }
+
+.canvas-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  pointer-events: none;           /* clicks pass through to canvas */
+  color: var(--text);
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+
+.canvas-overlay h1 {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(24px, 5vw, 48px);
+}
+
+.canvas-overlay h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(16px, 3.5vw, 24px);
+  color: var(--muted);
+}
+
+.canvas-overlay p {
+  margin: 6px 0 0 0;
+  font-weight: 600;
+  font-size: clamp(14px, 3vw, 18px);
+  color: var(--muted);
+}
+
+.canvas-wrap.no-placeholder .canvas-overlay { display: none; }
+
+.canvas-wrap.no-placeholder {
+  background-image: none;
+}
+
 canvas { image-rendering: pixelated; max-width: 100%; height: auto; }
 .meta { margin-top: 10px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+/* Pulsing yellow cue for primary next action */
+.pulse {
+  position: relative;
+  border-color: #ffd500 !important;
+  outline: 2px solid #ffd500;     /* visible on inputs that ignore border */
+  outline-offset: 2px;
+  animation: pulse-ring 1.2s ease-out infinite;
+  box-shadow:
+    0 0 0 2px rgba(255,213,0,0.65),
+    0 0 0 8px rgba(255,213,0,0);
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 2px rgba(255,213,0,0.65), 0 0 0 8px rgba(255,213,0,0); }
+  70%  { box-shadow: 0 0 0 2px rgba(255,213,0,0.35), 0 0 0 16px rgba(255,213,0,0); }
+  100% { box-shadow: 0 0 0 2px rgba(255,213,0,0.65), 0 0 0 8px rgba(255,213,0,0); }
+}
+
+
 
 /* Help modal */
 .modal {
@@ -191,4 +260,47 @@ canvas { image-rendering: pixelated; max-width: 100%; height: auto; }
   .modal-card {
     inset: 8% 3% auto 3%;
   }
+}
+
+/* Footer credits */
+.site-footer {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+}
+
+.credit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.credit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.credit-icon {
+  height: 1.5em;
+  width: auto;
+  image-rendering: auto;
+  flex: 0 0 auto;
+}
+
+.site-footer a {
+  color: var(--text);
+  text-decoration: underline;
+}
+.site-footer a:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 1024px) {
+  .site-footer { padding: 12px; }
 }
