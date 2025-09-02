@@ -19,7 +19,6 @@ It's entirely Javascript and runs only in your browser. There's no server proces
 [ https://dev.pixelgrid.cloud/ ] ( https://dev.pixelgrid.cloud/ )
 
 
-
 # Instructions
 
 1. Choose a file (PNG or JPG supported).
