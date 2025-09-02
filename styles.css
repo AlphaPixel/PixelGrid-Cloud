@@ -177,6 +177,26 @@ button:hover:not(:disabled) {
 canvas { image-rendering: pixelated; max-width: 100%; height: auto; }
 .meta { margin-top: 10px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
+/* Pulsing yellow cue for primary next action */
+.pulse {
+  position: relative;
+  border-color: #ffd500 !important;
+  outline: 2px solid #ffd500;     /* visible on inputs that ignore border */
+  outline-offset: 2px;
+  animation: pulse-ring 1.2s ease-out infinite;
+  box-shadow:
+    0 0 0 2px rgba(255,213,0,0.65),
+    0 0 0 8px rgba(255,213,0,0);
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 2px rgba(255,213,0,0.65), 0 0 0 8px rgba(255,213,0,0); }
+  70%  { box-shadow: 0 0 0 2px rgba(255,213,0,0.35), 0 0 0 16px rgba(255,213,0,0); }
+  100% { box-shadow: 0 0 0 2px rgba(255,213,0,0.65), 0 0 0 8px rgba(255,213,0,0); }
+}
+
+
+
 /* Help modal */
 .modal {
   position: fixed;

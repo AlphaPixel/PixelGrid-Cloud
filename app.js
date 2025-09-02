@@ -288,6 +288,11 @@ fileInput.addEventListener("change", async (e) => {
     downloadBtn.disabled=true;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     metaEl.textContent="";
+	
+	// pulse back to Browse
+	fileInput.classList.add("pulse");
+	processBtn.classList.remove("pulse");
+	downloadBtn.classList.remove("pulse");
     return;
   }
   canvasWrap.classList.add("no-placeholder");
@@ -300,6 +305,10 @@ fileInput.addEventListener("change", async (e) => {
   }
   processBtn.disabled=false;
   downloadBtn.disabled=true;
+  fileInput.classList.remove("pulse");
+  processBtn.classList.add("pulse");
+  downloadBtn.classList.remove("pulse");
+
   metaEl.textContent = `Loaded ${file.name} (${sourceImageBitmap.width}×${sourceImageBitmap.height})`;
 });
 
@@ -314,6 +323,10 @@ function refreshScaleInputs() {
 }
 enlargeToggle.addEventListener("change", refreshScaleInputs);
 refreshScaleInputs();
+
+// Cue the first action (browse) on load
+fileInput.classList.add("pulse");
+
 
 // Help modal wiring
 function openHelp(){ helpModal.setAttribute("aria-hidden","false"); }
@@ -398,6 +411,11 @@ document.getElementById("processBtn").addEventListener("click", () => {
   }
 
   downloadBtn.disabled = false;
+
+  // Move pulsing cue to Download
+  processBtn.classList.remove("pulse");
+  downloadBtn.classList.add("pulse");
+
   metaEl.textContent =
     `Output ${dstW}×${dstH}${doEnlarge ? ` → upscaled ×${scaleFactor}` : ""}, `
     + `resample=${resampleChoice}, palette=${paletteChoice} (${palette.length}), `
@@ -430,6 +448,10 @@ function drawGrid(ctx, w, h, step, color){
 // ====== Download ======
 downloadBtn.addEventListener("click", () => {
   if (!canvas.width || !canvas.height) return;
+
+  // Stop pulsing once download is invoked
+  downloadBtn.classList.remove("pulse");
+
   if (lastOutputBlobUrl){ URL.revokeObjectURL(lastOutputBlobUrl); lastOutputBlobUrl=null; }
   canvas.toBlob((blob)=>{
     if (!blob) return;
