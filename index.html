@@ -75,15 +75,19 @@
       <fieldset class="field" title="Choose dithering strategy before mapping to the palette.">
         <legend>Dither</legend>
         <label title="None: direct nearest-color mapping; clean but can band.">
-          <input type="radio" name="dither" value="none"/> None
+          <input type="radio" name="dither" value="none" checked /> None
         </label>
         <label title="Ordered (Bayer): patterned dithering; stable, grid-like texture.">
           <input type="radio" name="dither" value="ordered" /> Ordered (Bayer)
         </label>
-        <label title="Error Diffusion (Floyd-Steinberg): noise-like dithering; often best for photos.">
-          <input type="radio" name="dither" value="diffusion" checked /> Error Diffusion (Floyd-Steinberg)
+        <label title="Error Diffusion (Floyd–Steinberg): noise-like dithering; often best for photos.">
+          <input type="radio" name="dither" value="diffusion" /> Error Diffusion (Floyd–Steinberg)
+        </label>
+        <label title="Dizzy: error diffusion in randomized pixel order; pushes artifacts higher-frequency.">
+          <input type="radio" name="dither" value="dizzy" /> Dizzy (randomized diffusion)
         </label>
       </fieldset>
+
 
       <fieldset class="field" title="Optional: enlarge the final pixel art and overlay a counting grid.">
         <legend>Scale & Grid</legend>
@@ -143,7 +147,7 @@
 
 4. Choose the palette. WPlace Basic is the "free" 32-color palette. WPlace Extended is the 64-color palette that's not free. LEGO&trade; Bricks uses common BrickLink LEGO colors and is useful if you're making a LEGO mosaic.
 
-5. Choose dithering, or not. Dithering can make true-color images look a lot better but approximating missing colors with regular or noise-based patterns of available colors.
+5. Choose dithering, or not. Dithering can make true-color images look a lot better but approximating missing colors with regular or noise-based patterns of available colors. None is fine for a few solid colors. Ordered is good for synthetic/geometric images with more unvarying solid colors. Error Diffusion and Dizzy are better for natural true-color images.
 
 6. Choose whether you want blocky upscaling and a grid, and set the scale/grid size and overlay grid color. This blows up each final pixel using nearest neighbor (non-interpolated) enlarge by a factor of x (defaults to 5) and then overlays a grid of user-defined color (defaults to magenta) to help you see individual pixels in a large mass of common color. You do not want this step if you're using Blue Marble ( https://github.com/erickcastillovillegas-hub/wplace-bluemarble )
 
