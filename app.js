@@ -317,6 +317,7 @@ fileInput.addEventListener("change", async (e) => {
   ctx.imageSmoothingEnabled = true;   // default; explicit
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(sourceImageBitmap, 0, 0);
+  setPreviewZoomDisplay(canvas.width, canvas.height);
 
   processBtn.disabled=false;
   downloadBtn.disabled=true;
@@ -427,6 +428,7 @@ const palette = buildPalette(paletteHex);
   if (!doEnlarge) {
     canvas.width = dstW; canvas.height = dstH;
     ctx.putImageData(quantized, 0, 0);
+    setPreviewZoomDisplay(canvas.width, canvas.height);
   } else {
     const upW = dstW * scaleFactor;
     const upH = dstH * scaleFactor;
@@ -444,6 +446,8 @@ const palette = buildPalette(paletteHex);
 
     // grid overlay
     drawGrid(ctx, upW, upH, scaleFactor, gridColor);
+    setPreviewZoomDisplay(canvas.width, canvas.height); // will likely resolve to scale=1
+
   }
 
   downloadBtn.disabled = false;
@@ -507,3 +511,26 @@ downloadBtn.addEventListener("click", () => {
     a.remove();
   }, "image/png");
 });
+
+function setPreviewZoomDisplay(w, h) {
+  // Default: no zoom – use intrinsic size
+  let scale = 1;
+
+  // Heuristic: if small (e.g., ≤128px on the shorter side), zoom until ≈256px
+  const minDim = Math.min(w, h);
+  if (minDim <= 128) {
+    scale = Math.floor(256 / Math.max(1, minDim));
+    scale = Math.max(scale, 2);     // at least 2×
+    scale = Math.min(scale, 12);    // sanity cap
+  }
+
+  if (scale === 1) {
+    // Clear any previous explicit sizing
+    canvas.style.width = "";
+    canvas.style.height = "";
+  } else {
+    canvas.style.width = (w * scale) + "px";
+    canvas.style.height = (h * scale) + "px";
+  }
+}
+
