@@ -61,11 +61,14 @@
 
       <fieldset class="field" title="Select a fixed palette for quantization.">
         <legend>Palette</legend>
-        <label title="Basic: the free wplace 32-color palette.">
-          <input type="radio" name="palette" value="basic" checked /> Basic (32)
+        <label title="WPlace Basic: the free 32-color palette.">
+          <input type="radio" name="palette" value="basic" checked /> WPlace Basic (32)
         </label>
-        <label title="Extended: 64-color palette that is not free.">
-          <input type="radio" name="palette" value="extended" /> Extended (64)
+        <label title="WPlace Extended: 64-color palette that is not free.">
+          <input type="radio" name="palette" value="extended" /> WPlace Extended (64)
+        </label>
+        <label title="LEGO&trade; Brick colors from the BrickLink catalog; good for physical LEGO mosaics.">
+          <input type="radio" name="palette" value="lego" /> Lego&trade; Bricks
         </label>
       </fieldset>
 
@@ -138,7 +141,7 @@
 
 3. Choose the resize filtering method (bilinear or bicubic). Either should be fine.
 
-4. Choose the palette. Basic is the "free" wplace 32-color palette. Extended is the 64-color palette that's not free.
+4. Choose the palette. WPlace Basic is the "free" 32-color palette. WPlace Extended is the 64-color palette that's not free. LEGO&trade; Bricks uses common BrickLink LEGO colors and is useful if you're making a LEGO mosaic.
 
 5. Choose dithering, or not. Dithering can make true-color images look a lot better but approximating missing colors with regular or noise-based patterns of available colors.
 
@@ -185,6 +188,8 @@ It's entirely Javascript and runs only in your browser. There's no server proces
   </footer>
 
   <script src="version.js"></script>
+  <!-- LEGO palette (inspiration: https://github.com/debkbanerji/lego-art-remix/blob/master/app/js/bricklink-colors.js ) -->
+  <script src="lego-palette.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

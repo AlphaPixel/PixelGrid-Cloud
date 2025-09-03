@@ -369,7 +369,25 @@ document.getElementById("processBtn").addEventListener("click", () => {
   const scaleFactor   = Math.max(1, Math.floor(+scaleInput.value || 5));
   const gridColor     = gridColorEl.value || "#000000";
 
-  const palette = buildPalette(paletteChoice==="basic" ? PALETTE_BASIC_HEX : PALETTE_EXTENDED_HEX);
+  let paletteHex;
+  switch (paletteChoice) {
+    case "basic":
+      paletteHex = PALETTE_BASIC_HEX;
+      break;
+    case "extended":
+      paletteHex = PALETTE_EXTENDED_HEX;
+      break;
+    case "lego":
+      // From lego-palette.js loaded before app.js
+      paletteHex = (window.PALETTE_LEGO_HEX && window.PALETTE_LEGO_HEX.length)
+        ? window.PALETTE_LEGO_HEX
+        : PALETTE_BASIC_HEX; // fallback
+      break;
+    default:
+      paletteHex = PALETTE_BASIC_HEX;
+  }
+
+const palette = buildPalette(paletteHex);
 
   const srcW = sourceImageBitmap.width;
   const srcH = sourceImageBitmap.height;
