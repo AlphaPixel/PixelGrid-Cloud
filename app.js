@@ -281,6 +281,92 @@ function quantizeErrorDiffusion(img, out, palette) {
   }
 }
 
+// Dizzy dithering: randomized traversal; diffuse only into unprocessed neighbors
+// ref: https://liamappelbe.medium.com/dizzy-dithering-2ae76dbceba1
+function quantizeDizzy(img, out, palette, seed) {
+  const w = img.width, h = img.height, N = w * h;
+  const s = img.data;
+  const d = out.data;
+
+  // Working buffer (RGB error accumulation). Copy source into float buffer.
+  const buf = new Float32Array(s.length);
+  for (let i = 0; i < s.length; i++) buf[i] = s[i];
+
+  // Processed mask
+  const seen = new Uint8Array(N);
+
+  // Randomized order of all pixel indices
+  const order = new Uint32Array(N);
+  for (let i = 0; i < N; i++) order[i] = i;
+  const rng = mulberry32((seed >>> 0) || 0xC0FFEE);
+  // Shuffle: need a plain array for our swap helper or implement typed swap:
+  // Here we do typed-array swap manually:
+  for (let i = N - 1; i > 0; i--) {
+    const j = (rng() * (i + 1)) | 0;
+    const tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+  }
+
+  // Neighbor offsets (8-neighborhood). Heavier weight for orthogonals.
+  // [dx, dy, weight]
+  const NB = [
+    [ 1,  0, 10], [-1,  0, 10], [ 0,  1, 10], [ 0, -1, 10], // orthogonal
+    [ 1,  1,  1], [ 1, -1,  1], [-1,  1,  1], [-1, -1,  1]  // diagonals
+  ];
+
+  for (let k = 0; k < N; k++) {
+    const i = order[k];
+    const x = i % w;
+    const y = (i / w) | 0;
+    const idx = i * 4;
+
+    // Read current value with accumulated error
+    const r0 = buf[idx], g0 = buf[idx + 1], b0 = buf[idx + 2], a0 = buf[idx + 3];
+
+    // Quantize to nearest palette
+    const pi = nearestPaletteIndex(r0, g0, b0, palette);
+    const p = palette[pi];
+
+    // Write output
+    d[idx] = p[0]; d[idx + 1] = p[1]; d[idx + 2] = p[2]; d[idx + 3] = a0;
+
+    // Compute error (RGB)
+    const er = r0 - p[0], eg = g0 - p[1], eb = b0 - p[2];
+
+    // Gather unprocessed neighbors and total weight
+    let denom = 0;
+    // We’ll stash neighbor positions and weights in small fixed arrays
+    const nx = new Int16Array(8);
+    const ny = new Int16Array(8);
+    const nw = new Uint8Array(8);
+    let ncnt = 0;
+
+    for (let t = 0; t < NB.length; t++) {
+      const xx = x + NB[t][0];
+      const yy = y + NB[t][1];
+      if (xx < 0 || xx >= w || yy < 0 || yy >= h) continue;
+      const ni = yy * w + xx;
+      if (seen[ni]) continue; // only diffuse into unprocessed neighbors
+      nx[ncnt] = xx; ny[ncnt] = yy; nw[ncnt] = NB[t][2];
+      denom += NB[t][2];
+      ncnt++;
+    }
+
+    if (denom > 0 && (er || eg || eb)) {
+      for (let t = 0; t < ncnt; t++) {
+        const wfrac = nw[t] / denom;
+        const j = (ny[t] * w + nx[t]) * 4;
+        buf[j]     = clamp255(buf[j]     + er * wfrac);
+        buf[j + 1] = clamp255(buf[j + 1] + eg * wfrac);
+        buf[j + 2] = clamp255(buf[j + 2] + eb * wfrac);
+        // alpha left as-is
+      }
+    }
+
+    seen[i] = 1;
+  }
+}
+
+
 // ====== I/O and pipeline ======
 fileInput.addEventListener("change", async (e) => {
   const file = e.target.files && e.target.files[0];
@@ -317,6 +403,7 @@ fileInput.addEventListener("change", async (e) => {
   ctx.imageSmoothingEnabled = true;   // default; explicit
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(sourceImageBitmap, 0, 0);
+  setPreviewZoomDisplay(canvas.width, canvas.height);
 
   processBtn.disabled=false;
   downloadBtn.disabled=true;
@@ -369,7 +456,25 @@ document.getElementById("processBtn").addEventListener("click", () => {
   const scaleFactor   = Math.max(1, Math.floor(+scaleInput.value || 5));
   const gridColor     = gridColorEl.value || "#000000";
 
-  const palette = buildPalette(paletteChoice==="basic" ? PALETTE_BASIC_HEX : PALETTE_EXTENDED_HEX);
+  let paletteHex;
+  switch (paletteChoice) {
+    case "basic":
+      paletteHex = PALETTE_BASIC_HEX;
+      break;
+    case "extended":
+      paletteHex = PALETTE_EXTENDED_HEX;
+      break;
+    case "lego":
+      // From lego-palette.js loaded before app.js
+      paletteHex = (window.PALETTE_LEGO_HEX && window.PALETTE_LEGO_HEX.length)
+        ? window.PALETTE_LEGO_HEX
+        : PALETTE_BASIC_HEX; // fallback
+      break;
+    default:
+      paletteHex = PALETTE_BASIC_HEX;
+  }
+
+const palette = buildPalette(paletteHex);
 
   const srcW = sourceImageBitmap.width;
   const srcH = sourceImageBitmap.height;
@@ -403,12 +508,14 @@ document.getElementById("processBtn").addEventListener("click", () => {
     case "none":      quantizeNone(resized, quantized, palette); break;
     case "ordered":   quantizeOrdered(resized, quantized, palette); break;
     case "diffusion": quantizeErrorDiffusion(resized, quantized, palette); break;
+    case "dizzy":     quantizeDizzy(resized, quantized, palette, Date.now() & 0xffffffff); break; /* If we want deterministic results run-to-run, replace Date.now() with a fixed seed */
   }
   
   // Draw result, optionally enlarge + grid
   if (!doEnlarge) {
     canvas.width = dstW; canvas.height = dstH;
     ctx.putImageData(quantized, 0, 0);
+    setPreviewZoomDisplay(canvas.width, canvas.height);
   } else {
     const upW = dstW * scaleFactor;
     const upH = dstH * scaleFactor;
@@ -426,6 +533,8 @@ document.getElementById("processBtn").addEventListener("click", () => {
 
     // grid overlay
     drawGrid(ctx, upW, upH, scaleFactor, gridColor);
+    setPreviewZoomDisplay(canvas.width, canvas.height); // will likely resolve to scale=1
+
   }
 
   downloadBtn.disabled = false;
@@ -489,3 +598,45 @@ downloadBtn.addEventListener("click", () => {
     a.remove();
   }, "image/png");
 });
+
+function setPreviewZoomDisplay(w, h) {
+  // Default: no zoom – use intrinsic size
+  let scale = 1;
+
+  // Heuristic: if small (e.g., ≤128px on the shorter side), zoom until ≈256px
+  const minDim = Math.min(w, h);
+  if (minDim <= 128) {
+    scale = Math.floor(256 / Math.max(1, minDim));
+    scale = Math.max(scale, 2);     // at least 2×
+    scale = Math.min(scale, 12);    // sanity cap
+  }
+
+  if (scale === 1) {
+    // Clear any previous explicit sizing
+    canvas.style.width = "";
+    canvas.style.height = "";
+  } else {
+    canvas.style.width = (w * scale) + "px";
+    canvas.style.height = (h * scale) + "px";
+  }
+}
+
+// --- Seeded PRNG: Mulberry32 (fast, decent for ordering) ---
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return function() {
+    t += 0x6D2B79F5;
+    let x = t;
+    x = Math.imul(x ^ (x >>> 15), 1 | x);
+    x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// --- Fisher–Yates shuffle using provided RNG in [0,1) ---
+function shuffleInPlace(arr, rand) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = (rand() * (i + 1)) | 0;
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+}
