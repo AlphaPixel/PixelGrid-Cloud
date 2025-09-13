@@ -1,7 +1,7 @@
 const PixelGridReleaseMajor = 0;
-const PixelGridReleaseMinor = 1;
+const PixelGridReleaseMinor = 2;
 const PixelGridReleaseSub   = 0;
-const PixelGridReleaseName  = "Goya";
+const PixelGridReleaseName  = "Caravaggio";
 
 // Construct immutable string
 const PixelGridReleaseString =

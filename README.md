@@ -5,7 +5,9 @@ It can also then make a reference image for hand pixeling (without an overlay to
 
 This is not a script to draw the image on wplace for you. We don't do botting. It's just a tool to help you create a reference image that humans can follow to design an image to draw by hand.
 
-It's entirely Javascript and runs only in your browser. There's no server processing. It's hosted on Cloudflare Pages.
+It can also be used to rescale and map an image to Lego&trade; brick colors, for making mosaics. This site is not affiliated with LEGO A/S, also known as the LEGO Group.
+
+It's entirely Javascript and runs only in your browser. There's no server processing. It's hosted on [ Cloudflare Pages ] ( https://pages.cloudflare.com/ ).
 
 # URLs
 
@@ -27,7 +29,7 @@ It's entirely Javascript and runs only in your browser. There's no server proces
 
 3. Choose the resize filtering method (bilinear or bicubic). Either should be fine.
 
-4. Choose the palette. Basic is the "free" wplace 32-color palette. Extended is the 64-color palette that's not free.
+4. Choose the palette. Basic is the "free" wplace 32-color palette. Extended is the 64-color palette that's not free. Lego uses only the colors that Lego&trade; bricks are available in.
 
 5. Choose dithering, or not. Dithering can make true-color images look a lot better but approximating missing colors with regular or noise-based patterns of available colors.
 
