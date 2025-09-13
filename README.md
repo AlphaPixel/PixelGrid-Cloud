@@ -5,7 +5,7 @@ It can also then make a reference image for hand pixeling (without an overlay to
 
 This is not a script to draw the image on wplace for you. We don't do botting. It's just a tool to help you create a reference image that humans can follow to design an image to draw by hand.
 
-It can also be used to rescale and map an image to Lego&trade; brick colors, for making mosaics. This site is not affiliated with LEGO A/S, also known as the LEGO Group.
+It can also be used to rescale and map an image to Lego&trade; brick colors, for making mosaics. This site is not affiliated with LEGO A/S, also known as the LEGO Group.
 
 It's entirely Javascript and runs only in your browser. There's no server processing. It's hosted on [ Cloudflare Pages ] ( https://pages.cloudflare.com/ ).
 
